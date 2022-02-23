@@ -101,7 +101,7 @@ export default function GamesList() {
               {!admin && game.data().approved && (
                 <Game {...game.data() as any} id={game.id} />
               )}
-              {admin && <Game {...game.data() as any} id={game.id} />}
+              {admin && <Game {...game.data() as any} admin={admin} id={game.id} />}
             </Fragment>
           ))}
         </Grid>

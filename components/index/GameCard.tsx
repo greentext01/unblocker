@@ -22,6 +22,7 @@ type Props = {
   name: string;
   category: string;
   runs: Array<Run>;
+  admin: boolean;
   approved: string;
 };
 
@@ -43,7 +44,7 @@ export default function Game(props: Props) {
           <Link href={`/play/${props.id}`} passHref>
             <Button size="small">Play</Button>
           </Link>
-          {!props.approved && (
+          {!props.approved && props.admin && (
             <Button
               size="small"
               onClick={() => {
@@ -57,7 +58,7 @@ export default function Game(props: Props) {
               Approve
             </Button>
           )}
-          {props.approved && (
+          {props.approved && props.admin && (
             <Button
               size="small"
               onClick={() => {
