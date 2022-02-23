@@ -16,7 +16,7 @@ service cloud.firestore {
           request.resource.data.runs == [] &&
           request.resource.data.url is string &&
           request.resource.data.category is string &&
-          request.resource.data.category in ['Stite', 'Other', 'Puzzle', 'Skill', 'Level'] &&
+          request.resource.data.category in ['Site', 'Other', 'Puzzle', 'Skill', 'Level'] &&
           request.auth != null;
       }
     }

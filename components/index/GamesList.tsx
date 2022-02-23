@@ -18,7 +18,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import Game from './Game';
+import Game from './GameCard';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function GamesList() {
@@ -99,9 +99,9 @@ export default function GamesList() {
           {games?.docs.map((game, index) => (
             <Fragment key={index}>
               {!admin && game.data().approved && (
-                <Game game={{ ...game.data(), id: game.id }} />
+                <Game {...game.data() as any} id={game.id} />
               )}
-              {admin && <Game game={{ ...game.data(), id: game.id }} />}
+              {admin && <Game {...game.data() as any} id={game.id} />}
             </Fragment>
           ))}
         </Grid>
