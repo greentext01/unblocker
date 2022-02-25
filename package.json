@@ -17,6 +17,7 @@
     "cypress-firebase": "^2.2.1",
     "firebase": "^9.6.7",
     "next": "12.1.0",
+    "next-pwa": "^5.4.4",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-firebase-hooks": "^5.0.2"

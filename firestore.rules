@@ -9,7 +9,7 @@ service cloud.firestore {
       allow read;
       allow create: if request.resource.data.approved == false && validateGame();
 
-      allow update: if isAdmin() && validateGame();
+      allow update: if (isAdmin() || (request.auth.uid == request.resource.owner)) && validateGame();
 
       function validateGame() {
         return request.resource.data.name is string &&
@@ -22,6 +22,11 @@ service cloud.firestore {
     }
     
     match /admins/{adminId} {
+    	allow write: if false;
+      allow read;
+    }
+
+    match /proxies/{proxyId} {
     	allow write: if false;
       allow read;
     }

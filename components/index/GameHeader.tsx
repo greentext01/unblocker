@@ -9,9 +9,8 @@ export default function GameHeader() {
         justifyContent: 'center'
       }}>
         <h1 style={{
-          margin: '5px'
         }}>
-          Games
+          Games (With Shrimp 🦐)
         </h1>
       </Box>
       <Box display="flex" sx={{

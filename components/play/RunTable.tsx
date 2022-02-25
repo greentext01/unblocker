@@ -10,30 +10,38 @@ import {
 import { Run } from '../../types/game';
 
 type Props = {
-  runs: Array<Run>
+  runs: Array<Run>;
 };
 
 const RunTable = (props: Props) => {
+  // secs 🤨
+  function secsToTime(secs: number) {
+    return new Date(secs * 1000).toISOString().substring(11, 19);
+  }
+
   return (
     <TableContainer>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Runner</TableCell>
-            <TableCell align="right">Time</TableCell>
+            <TableCell>Time</TableCell>
+            <TableCell>Video</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {props.runs.map((run, index) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
+            <TableRow key={index}>
               <TableCell component="th" scope="row">
                 {run.runner}
               </TableCell>
               <TableCell component="th" scope="row">
-                {run.time}
+                {secsToTime(run.time)}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                <a href={run.video} target="_blank" rel="noopener noreferrer">
+                  {run.video}
+                </a>
               </TableCell>
             </TableRow>
           ))}

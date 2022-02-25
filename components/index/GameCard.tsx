@@ -77,7 +77,3 @@ export default function Game(props: Props) {
     </Grid>
   );
 }
-
-Game.propTypes = {
-  game: PropTypes.object.isRequired,
-};

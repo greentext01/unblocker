@@ -2,7 +2,7 @@ import { Html, Head, Main, NextScript } from 'next/document';
 
 const Document = () => {
   return (
-    <Html>
+    <Html lang="en">
       <Head>
         <link rel="icon" type="image/svg" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="apple-icon-180.png" />
@@ -10,6 +10,9 @@ const Document = () => {
         <link rel="manifest" href="/manifest.json" />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <meta name="description" content="Node unblocker + Games list + 🦐" />
+        <meta name="theme-color" content="#1e1e1e" />
 
         <link
           rel="apple-touch-startup-image"
@@ -140,6 +143,29 @@ const Document = () => {
           rel="apple-touch-startup-image"
           href="apple-splash-1136-640.jpg"
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="Node Unblocker" />
+        <meta name="twitter:title" content="Node unblocker" />
+        <meta
+          name="twitter:description"
+          content="Node unblocker + Games list + 🦐"
+        />
+        <meta
+          name="twitter:image"
+          content="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/285/shrimp_1f990.png"
+        />
+
+        <meta property="og:title" content="Node Unblocker" />
+        <meta
+          property="og:description"
+          content="Node unblocker + Games list + 🦐"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://games.oliveman.dev/" />
+        <meta
+          property="og:image"
+          content="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/285/shrimp_1f990.png"
         />
       </Head>
       <body>

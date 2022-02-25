@@ -1,6 +1,7 @@
 type Run = {
-  time: Date;
+  time: number;
   runner: string;
+  video: string;
 };
 
 type Game = {
@@ -9,6 +10,7 @@ type Game = {
   category: string;
   runs: Array<Run>;
   approved: string;
+  url: string;
 };
 
 export default Game;

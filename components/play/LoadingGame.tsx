@@ -7,8 +7,9 @@ const GameBox = () => {
     <Box
       sx={{
         height: '100vh',
-        display: 'grid',
-        placeItems: 'center',
+        display: 'grflexid',
+        justifyContent: 'center',
+        alignItems: 'center',
         py: '50px',
       }}
     >

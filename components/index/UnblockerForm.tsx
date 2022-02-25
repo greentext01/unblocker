@@ -1,44 +1,43 @@
 import React, { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
+import UnblockerButtons from './UnblockerButtons';
+import { useDocument } from 'react-firebase-hooks/firestore';
+import { doc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import launchUnblocker from '../../util/launchUnblocker';
 
 function UnblockerForm() {
+  const [error, setError] = useState('');
   const [url, setUrl] = useState('');
 
-  function onSubmit() {
-    const lowerURL = url.toLowerCase();
-    if (lowerURL.startsWith('http://') || lowerURL.startsWith('https://')) {
-      window.location.replace(`/proxy/${url}`);
-    } else {
-      const proto = window.location.protocol;
-      const host = window.location.host;
-      window.location.replace(`${proto}//${host}/proxy/http://${url}`);
-    }
+  function onSubmit(selectedIndex: number) {
+    if (!url) return setError('Please input a url');
+    launchUnblocker(selectedIndex == 0 ? 'womginx' : 'corrosion', url);
   }
 
   return (
-    <>
-      <TextField
-        label="Paste URL here"
-        variant="outlined"
-        value={url}
-        sx={{
-          width: '60%',
-          height: '56px',
-        }}
-        onChange={(event) => setUrl(event.target.value)}
-      />
-      <Button
-        variant="contained"
-        style={{
-          marginLeft: '5px',
-          height: '56px',
-          width: '75px',
-        }}
-        onClick={() => onSubmit()}
-      >
-        Go!
-      </Button>
-    </>
+    <Grid container width="70%" spacing={0.5}>
+      <Grid item xs={12} md={9} lg={10}>
+        <TextField
+          label="Paste URL here"
+          variant="outlined"
+          value={url}
+          sx={{
+            height: '56px',
+          }}
+          onChange={(event) => {
+            setUrl(event.target.value);
+            setError('');
+          }}
+          fullWidth
+          error={!!error}
+          helperText={error}
+        />
+      </Grid>
+      <Grid item xs={12} md={3} lg={2}>
+        <UnblockerButtons handleClick={onSubmit} />
+      </Grid>
+    </Grid>
   );
 }
 

@@ -17,7 +17,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { useRouter } from 'next/router';
 
-const urlre =
+export const urlre =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
 export default function AddGame() {
@@ -39,25 +39,29 @@ export default function AddGame() {
   if (authErr) return <Alert severity="error">{authErr.message}</Alert>;
 
   function sendGame() {
-    if (!name) {
-      setErr('Please select a name');
-      return;
-    } else if (!category) {
-      setErr('Please select a category');
-      return;
-    } else if (!url || !urlre.test(url)) {
-      setErr('Please select a valid url');
-      return;
-    }
+    if (user) {
+      if (!name) {
+        setErr('Please select a name');
+        return;
+      } else if (!category) {
+        setErr('Please select a category');
+        return;
+      } else if (!url || !urlre.test(url)) {
+        setErr('Please select a valid url');
+        return;
+      }
 
-    addDoc(collection(db, 'games'), {
-      approved: false,
-      category,
-      name,
-      url,
-      runs: [],
-    });
-    router.push('/');
+      addDoc(collection(db, 'games'), {
+        approved: false,
+        category,
+        name,
+        url,
+        runs: [],
+      });
+      router.push('/');
+    } else {
+      router.push('/');
+    }
   }
 
   return (
