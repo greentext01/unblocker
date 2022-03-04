@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, TextField } from '@mui/material';
 import UnblockerButtons from './UnblockerButtons';
-import { useDocument } from 'react-firebase-hooks/firestore';
-import { doc } from 'firebase/firestore';
-import { db } from '../../firebase';
-import launchUnblocker from '../../util/launchUnblocker';
+import launchUnblocker from '../../lib/launchUnblocker';
 
 function UnblockerForm() {
   const [error, setError] = useState('');
@@ -17,7 +14,7 @@ function UnblockerForm() {
 
   return (
     <Grid container width="70%" spacing={0.5}>
-      <Grid item xs={12} md={9} lg={10}>
+      <Grid item xs={12} md={true}>
         <TextField
           label="Paste URL here"
           variant="outlined"
@@ -34,7 +31,7 @@ function UnblockerForm() {
           helperText={error}
         />
       </Grid>
-      <Grid item xs={12} md={3} lg={2}>
+      <Grid item xs={12} md="auto">
         <UnblockerButtons handleClick={onSubmit} />
       </Grid>
     </Grid>

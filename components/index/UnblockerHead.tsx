@@ -2,24 +2,26 @@ import { Paper, Box } from '@mui/material';
 import UnblockerForm from './UnblockerForm';
 import React from 'react';
 import Link from 'next/link';
+import RespHeader from '../util/RespHeader';
 
 function UnblockerHead() {
   return (
     <>
       <Paper style={{ margin: '5px' }}>
-        <h1
+        <RespHeader
           style={{
             textAlign: 'center',
             paddingTop: '50px',
             marginTop: '0px',
           }}
-        >
+          >
           Node unblocker mk2
-        </h1>
+        </RespHeader>
         <p
           style={{
             textAlign: 'center',
             margin: '0px',
+            fontSize: 'min(4vw, 16px)',
           }}
         >
           By using the proxy, you agree to the{' '}
@@ -42,4 +44,3 @@ function UnblockerHead() {
 }
 
 export default UnblockerHead;
-

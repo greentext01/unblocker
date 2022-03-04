@@ -1,71 +1,90 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   Grid,
+  Link as MuiLink,
   Typography,
 } from '@mui/material';
-import PropTypes from 'prop-types';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
 import Link from 'next/link';
-
-type Run = {
-  time: Date;
-  runner: string;
-};
+import { post } from '../../lib/superfetch';
 
 type Props = {
-  id: string;
-  name: string;
-  category: string;
-  runs: Array<Run>;
-  admin: boolean;
-  approved: string;
+  game: GameType;
+  token: string | undefined;
 };
 
 export default function Game(props: Props) {
+  const [approved, setApproved] = useState(props.game.approved);
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
       <Card
         sx={{
-          opacity: props.approved ? 1 : 0.15,
+          opacity: approved ? 1 : 0.15,
         }}
       >
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {props.name}
+          <Link href={`/play/${props.game.id}`} passHref>
+            <MuiLink
+              gutterBottom
+              variant="h5"
+              component="div"
+              color="inherit"
+              underline="hover"
+            >
+              {props.game.name}
+            </MuiLink>
+          </Link>
+          <Typography variant="caption" component="div">
+            Category: {props.game.category}
           </Typography>
-          <Typography variant="caption">Category: {props.category}</Typography>
+          <Typography variant="caption" component="div">
+            By: {props.game.credit.name}
+          </Typography>
         </CardContent>
         <CardActions>
-          <Link href={`/play/${props.id}`} passHref>
+          <Link href={`/play/${props.game.id}`} passHref>
             <Button size="small">Play</Button>
           </Link>
-          {!props.approved && props.admin && (
+          {!approved && (
             <Button
               size="small"
               onClick={() => {
-                setDoc(
-                  doc(db, 'games', props.id),
-                  { approved: true },
-                  { merge: true }
+                setApproved(true);
+
+                post(
+                  `/api/game/approve/${props.game.id}`,
+                  {
+                    approved: true,
+                  },
+                  {
+                    token: props.token,
+                    method: 'PATCH',
+                  }
                 );
               }}
             >
               Approve
             </Button>
           )}
-          {props.approved && props.admin && (
+          {approved && (
             <Button
               size="small"
               onClick={() => {
-                setDoc(
-                  doc(db, 'games', props.id),
-                  { approved: false },
-                  { merge: true }
+                setApproved(false);
+
+                post(
+                  `/api/game/approve/${props.game.id}`,
+                  {
+                    approved: false,
+                  },
+                  {
+                    token: props.token,
+                    method: 'PATCH',
+                  }
                 );
               }}
             >

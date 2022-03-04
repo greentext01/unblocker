@@ -1,14 +1,20 @@
 import React from 'react';
-import 'firebase/auth';
-import { auth } from '../../firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
+import useUser from '../../lib/useUser';
 
-export default function AuthButtons() {
-  const [user, loading] = useAuthState(auth);
+export default function AuthButtons(props: {
+  onChange?: (token: string | null) => void;
+}) {
+  const { user, loading, changeUser } = useUser();
 
-  if (user && !loading) return <LogoutButton />;
-  else if (!loading) return <LoginButton />;
+  function handleChange(token: string | null) {
+    changeUser(token);
+    props.onChange?.(token);
+  }
+
+  if (user) return <LogoutButton onLogout={() => handleChange(null)} />;
+  else if (!user && !loading)
+    return <LoginButton onLogin={(token) => handleChange(token)} />;
   else return <></>;
 }

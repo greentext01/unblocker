@@ -1,18 +1,50 @@
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import Game from '../../components/play/Game';
-import LoadingGame from '../../components/play/LoadingGame';
-import { db } from '../../firebase';
-import { doc } from 'firebase/firestore';
+import prisma from '../../lib/prisma';
 
-const Play = () => {
-  const router = useRouter();
-  const { id } = router.query;
+type Props = {
+  game: GameDetails;
+  runs: Run[];
+};
 
-  if (!id) return <LoadingGame />;
+const Play = (props: Props) => {
+  return <Game {...props} />;
+};
 
-  return <Game id={id as string} />;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = parseInt(context.params?.id as string);
+  if (!id) return { notFound: true };
+
+  const game = await prisma.game.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      credit: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  if (!game) return { notFound: true };
+
+  const runs = await prisma.run.findMany({
+    where: {
+      gameId: game.id,
+    },
+    include: {
+      runner: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  return { props: { game, runs } };
 };
 
 export default Play;

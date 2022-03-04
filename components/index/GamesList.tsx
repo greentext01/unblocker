@@ -1,15 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {
-  collection,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { auth, db } from '../../firebase';
-import {
-  Alert,
   Box,
   FormControl,
   Grid,
@@ -19,41 +9,23 @@ import {
   Select,
 } from '@mui/material';
 import Game from './GameCard';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import useUser from '../../lib/useUser';
+import { get } from '../../lib/superfetch';
 
 export default function GamesList() {
-  const gameRef = collection(db, 'games');
-  const adminRef = collection(db, 'admins');
+  const { user, token } = useUser();
+  const [categ, setCateg] = useState('Any');
 
-  const [categ, setCateg] = useState('');
-  const [user] = useAuthState(auth);
-  const [admin, setAdmin] = useState(false);
+  const [games, setGames] = useState<GameType[]>([]);
 
-  /* 
-  Can't conditionally call useCollection 
-  so I need to use state + useEffect + getDocs
-  */
   useEffect(() => {
-    async function getAdmin() {
-      if (user) {
-        const adminQ = query(adminRef, where(documentId(), '==', user.uid));
-        setAdmin(!(await getDocs(adminQ)).empty);
-      } else {
-        setAdmin(false);
-      }
-    }
+    const getGames = async () => {
+      const data = await get(`/api/game/${categ}`, { token });
+      setGames(data.games);
+    };
 
-    getAdmin();
-  }, [adminRef, user]);
-
-  let q = undefined;
-  if (categ && categ != 'Any') {
-    q = query(gameRef, where('category', '==', categ));
-  } else {
-    q = gameRef;
-  }
-
-  const [games, loadingGames, error] = useCollection(q);
+    getGames();
+  }, [user, categ, token]);
 
   function SelectCateg() {
     return (
@@ -83,25 +55,22 @@ export default function GamesList() {
     );
   }
 
-  if (loadingGames)
+  if (!games)
     return (
       <>
         <SelectCateg />
         <LinearProgress sx={{ m: 2 }} />
       </>
     );
-  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
+
   return (
     <>
       <SelectCateg />
       <Box sx={{ m: 2 }}>
         <Grid container spacing={2}>
-          {games?.docs.map((game, index) => (
+          {games.map((game, index) => (
             <Fragment key={index}>
-              {!admin && game.data().approved && (
-                <Game {...game.data() as any} id={game.id} />
-              )}
-              {admin && <Game {...game.data() as any} admin={admin} id={game.id} />}
+              <Game game={game} token={token} />
             </Fragment>
           ))}
         </Grid>

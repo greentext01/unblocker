@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import {
   Table,
   TableBody,
@@ -7,17 +7,15 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { Run } from '../../types/game';
+import RunRow from './RunRow';
+import useUser from '../../lib/useUser';
 
 type Props = {
-  runs: Array<Run>;
+  runs: Run[];
 };
 
 const RunTable = (props: Props) => {
-  // secs 🤨
-  function secsToTime(secs: number) {
-    return new Date(secs * 1000).toISOString().substring(11, 19);
-  }
+  const { user, token } = useUser();
 
   return (
     <TableContainer>
@@ -25,25 +23,18 @@ const RunTable = (props: Props) => {
         <TableHead>
           <TableRow>
             <TableCell>Runner</TableCell>
-            <TableCell>Time</TableCell>
             <TableCell>Video</TableCell>
+            {user?.admin && <TableCell>Approve</TableCell>}
+            <TableCell>Time</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {props.runs.map((run, index) => (
-            <TableRow key={index}>
-              <TableCell component="th" scope="row">
-                {run.runner}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {secsToTime(run.time)}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <a href={run.video} target="_blank" rel="noopener noreferrer">
-                  {run.video}
-                </a>
-              </TableCell>
-            </TableRow>
+            <Fragment key={index}>
+              {(run.approved || user?.admin) && (
+                <RunRow {...run} token={token} />
+              )}
+            </Fragment>
           ))}
         </TableBody>
       </Table>

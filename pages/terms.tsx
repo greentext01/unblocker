@@ -9,8 +9,10 @@ export default function Terms() {
       <Typography variant="h4">Terms and Conditions</Typography>
       <ul>
         <li>
-          DON&apos;T USE THIS IN CLASS. This website only meant for étude if the
-          teacher/surveillant allows iPads.
+          <b>
+            DON&apos;T USE THIS IN CLASS. Only play games when you have free time
+            and it is allowed for you to do so (étude, foyer...).
+          </b>
         </li>
         <li>
           I could blacklist a website if I feel like it (But I probably

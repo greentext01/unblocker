@@ -1,10 +1,17 @@
 import React from 'react';
-import { signOut } from 'firebase/auth';
+import { GoogleLogout } from 'react-google-login';
 import GoogleButton from './GoogleButton';
-import { auth } from '../../firebase';
 
-function LogoutButton() {
-  return <GoogleButton signin={false} onClick={() => signOut(auth)} />;
+function LogoutButton(props: {onLogout: () => void}) {
+  return (
+    <GoogleLogout
+      clientId={process.env.GOOGLE_CLIENT_ID as string}
+      onLogoutSuccess={() => props.onLogout()}
+      render={(renderProps) => (
+        <GoogleButton signin={false} onClick={renderProps.onClick} />
+      )}
+    />
+  );
 }
 
 export default LogoutButton;

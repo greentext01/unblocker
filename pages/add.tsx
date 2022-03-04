@@ -3,26 +3,22 @@ import {
   Button,
   FormControl,
   InputLabel,
-  LinearProgress,
   MenuItem,
   Paper,
   Select,
   Stack,
   TextField,
 } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { collection, addDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import useUser from '../lib/useUser';
+import { post } from '../lib/superfetch';
+import { Center } from '../components/util/Center';
 
 export const urlre =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
 export default function AddGame() {
-  const [user, loading, authErr] = useAuthState(auth);
-
   const [name, setName] = useState<string>('');
   const [url, setUrl] = useState<string>('');
   const [category, setCateg] = useState<string>('');
@@ -30,54 +26,52 @@ export default function AddGame() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user && !loading) {
-      router.push('/signin');
-    }
-  }, [loading, router, user]);
+  const { user, loading, token } = useUser();
 
-  if (authErr) return <Alert severity="error">{authErr.message}</Alert>;
+  if (!user && !loading) router.push('/signin');
 
   function sendGame() {
-    if (user) {
-      if (!name) {
-        setErr('Please select a name');
-        return;
-      } else if (!category) {
-        setErr('Please select a category');
-        return;
-      } else if (!url || !urlre.test(url)) {
-        setErr('Please select a valid url');
-        return;
-      }
+    if (!name) {
+      setErr('Please select a name');
+      return;
+    } else if (!category) {
+      setErr('Please select a category');
+      return;
+    } else if (!url || !urlre.test(url)) {
+      setErr('Please select a valid url');
+      return;
+    }
 
-      addDoc(collection(db, 'games'), {
+    post(
+      '/api/game/create',
+      {
         approved: false,
         category,
         name,
         url,
         runs: [],
-      });
-      router.push('/');
-    } else {
-      router.push('/');
-    }
+      },
+      {
+        token,
+      }
+    );
+
+    router.push('/');
   }
 
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <Center>
       <Paper
         sx={{
-          p: { xs: 2, sm: 10 },
-          width: 900,
-          m: { xs: 1, sm: 10 },
+          p: {
+            xs: 2,
+            sm: 10,
+          },
+          width: 'min(90vw, 900px)',
+          m: {
+            xs: 1,
+            sm: 10,
+          },
         }}
       >
         {err && <Alert severity="error">{err}</Alert>}
@@ -115,13 +109,15 @@ export default function AddGame() {
           />
           <Button
             variant="contained"
-            sx={{ width: '100px' }}
+            sx={{
+              width: '100px',
+            }}
             onClick={sendGame}
           >
             Submit
           </Button>
         </Stack>
       </Paper>
-    </Box>
+    </Center>
   );
 }

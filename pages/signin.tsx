@@ -1,24 +1,22 @@
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import AuthButtons from '../components/auth/AuthButtons';
-import { auth } from '../firebase';
+import useUser from '../lib/useUser';
 
 export default function SignIn() {
-  const [user, loading] = useAuthState(auth);
   const router = useRouter();
+  const { user } = useUser();
 
-  useEffect(() => {
-    if (user && !loading) {
-      router.push('/');
-    }
-  }, [user, loading, router]);
+  if (user) router.push('/');
 
   return (
     <Box sx={{ margin: '10vmin' }}>
       <h1>You are not signed in!</h1>
-      <AuthButtons />
+      <AuthButtons
+        onChange={(token) => {
+          if (token) router.push('/');
+        }}
+      />
     </Box>
   );
 }

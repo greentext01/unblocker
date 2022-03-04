@@ -1,26 +1,20 @@
 import React from 'react';
-import { Alert, Fab, Tooltip } from '@mui/material';
+import { Fab, Tooltip } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../firebase';
 import { useRouter } from 'next/router';
+import useUser from '../../lib/useUser';
 
 export default function AddButton() {
   const router = useRouter();
-  const [user, loading, err] = useAuthState(auth);
+  const { user } = useUser();
 
   function handleAdd() {
-    if (!user && !loading) {
-      router.push('/signin');
-    } else {
-      router.push('/add');
-    }
+    if (!user) router.push('/signin');
+    else router.push('/add');
   }
 
-  if (err) return <Alert severity="error">{err.message}</Alert>;
-
   return (
-    <Tooltip title='Add game'>
+    <Tooltip title="Add game">
       <Fab
         color="primary"
         aria-label="add"
