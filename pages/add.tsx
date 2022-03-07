@@ -20,9 +20,6 @@ import Link from 'next/link';
 export const urlre =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
-const urlHelperText =
-  'This needs to be the url without the unblocker. For instance, "https://unblocker.com/proxy/https://game.com" would be wrong. The right url would be "https://game.com". The website will automatically add the unblocker url to it.';
-
 export default function AddGame() {
   const [name, setName] = useState<string>('');
   const [url, setUrl] = useState<string>('');
@@ -112,7 +109,6 @@ export default function AddGame() {
                 value={url}
                 fullWidth
                 onChange={(e) => setUrl(e.target.value)}
-                helperText={urlHelperText}
               />
               <Button
                 variant="contained"

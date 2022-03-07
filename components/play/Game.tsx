@@ -28,20 +28,9 @@ const GameBox = (props: Props) => {
           justifyContent: 'center',
         }}
       >
-        <Stack direction="row" spacing={0.5}>
-          <Button
-            variant="contained"
-            onClick={() => launchUnblocker('womginx', props.game.url)}
-          >
-            Play on Womginx
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => launchUnblocker('corrosion', props.game.url)}
-          >
-            Play on Corrosion
-          </Button>
-        </Stack>
+        <Button variant="contained" onClick={() => window.open(props.game.url)} size="large">
+          Play
+        </Button>
       </Box>
 
       <Box sx={{ mt: 15 }}>
