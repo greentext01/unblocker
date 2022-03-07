@@ -14,15 +14,21 @@ import { useRouter } from 'next/router';
 import useUser from '../lib/useUser';
 import { post } from '../lib/superfetch';
 import { Center } from '../components/util/Center';
+import { Box } from '@mui/system';
+import Link from 'next/link';
 
 export const urlre =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+
+const urlHelperText =
+  'This needs to be the url without the unblocker. For instance, "https://unblocker.com/proxy/https://game.com" would be wrong. The right url would be "https://game.com". The website will automatically add the unblocker url to it.';
 
 export default function AddGame() {
   const [name, setName] = useState<string>('');
   const [url, setUrl] = useState<string>('');
   const [category, setCateg] = useState<string>('');
   const [err, setErr] = useState<string>('');
+  const [sent, setSent] = useState(false);
 
   const router = useRouter();
 
@@ -43,7 +49,7 @@ export default function AddGame() {
     }
 
     post(
-      '/api/game/create',
+      '/api/game',
       {
         approved: false,
         category,
@@ -54,9 +60,7 @@ export default function AddGame() {
       {
         token,
       }
-    );
-
-    router.push('/');
+    ).then(() => setSent(true));
   }
 
   return (
@@ -74,49 +78,63 @@ export default function AddGame() {
           },
         }}
       >
-        {err && <Alert severity="error">{err}</Alert>}
-        <h1>Add game</h1>
-        <Stack spacing={3}>
-          <TextField
-            label="Name"
-            variant="outlined"
-            value={name}
-            fullWidth
-            onChange={(e) => setName(e.target.value)}
-          />
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Category</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={category}
-              label="Category"
-              onChange={(e) => setCateg(e.target.value)}
-            >
-              <MenuItem value="Site">Site</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-              <MenuItem value="Puzzle">Puzzle</MenuItem>
-              <MenuItem value="Skill">Skill</MenuItem>
-              <MenuItem value="Level">Level</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            label="Url"
-            variant="outlined"
-            value={url}
-            fullWidth
-            onChange={(e) => setUrl(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            sx={{
-              width: '100px',
-            }}
-            onClick={sendGame}
-          >
-            Submit
-          </Button>
-        </Stack>
+        {!sent && (
+          <>
+            {err && <Alert severity="error">{err}</Alert>}
+            <h1>Add game</h1>
+            <Stack spacing={3}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                value={name}
+                fullWidth
+                onChange={(e) => setName(e.target.value)}
+              />
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={category}
+                  label="Category"
+                  onChange={(e) => setCateg(e.target.value)}
+                >
+                  <MenuItem value="Site">Site</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                  <MenuItem value="Puzzle">Puzzle</MenuItem>
+                  <MenuItem value="Skill">Skill</MenuItem>
+                  <MenuItem value="Level">Level</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                label="Url"
+                variant="outlined"
+                value={url}
+                fullWidth
+                onChange={(e) => setUrl(e.target.value)}
+                helperText={urlHelperText}
+              />
+              <Button
+                variant="contained"
+                sx={{
+                  width: '100px',
+                }}
+                onClick={sendGame}
+              >
+                Submit
+              </Button>
+            </Stack>
+          </>
+        )}
+
+        {sent && (
+          <>
+            <Box>
+              Submitted! Please wait for the game to get approved by the admins.
+            </Box>
+            <Link href="/">Back home</Link>
+          </>
+        )}
       </Paper>
     </Center>
   );

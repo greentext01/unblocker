@@ -22,7 +22,7 @@ const RunRow = (props: Run & {token: string | undefined}) => {
       <TableCell component="th" scope="row">
         <PlayArrow onClick={() => setOpen(true)} />
       </TableCell>
-      {approved && (
+      {approved && props.token && (
         <TableCell>
           <Button
             variant="contained"
@@ -44,7 +44,7 @@ const RunRow = (props: Run & {token: string | undefined}) => {
           </Button>
         </TableCell>
       )}
-      {!approved && (
+      {!approved && props.token && (
         <TableCell>
           <Button
             variant="contained"

@@ -9,12 +9,12 @@ export default async function launchUnblocker(
 
   if (!url) return 'Please input a url';
 
-  if (!proxy) return 'Failed to get unblocker ' + unblocker;
+  if (!proxy.proxy) return 'Failed to get unblocker ' + unblocker;
 
   const lowerURL = url.toLowerCase();
   if (urlre.test(lowerURL)) {
-    window.open(`${proxy.url}${url}`);
+    window.open(`${proxy.proxy}${url}`);
   } else {
-    window.open(`${proxy.url}https://${url}`);
+    window.open(`${proxy.proxy}https://${url}`);
   }
 }

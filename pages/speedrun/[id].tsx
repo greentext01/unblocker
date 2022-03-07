@@ -28,7 +28,7 @@ const Speedrun = (props: Props) => {
 
   const router = useRouter();
 
-  const { user, loading } = useUser();
+  const { user, loading, token } = useUser();
 
   if (!user && !loading) router.push('/signin');
 
@@ -55,19 +55,23 @@ const Speedrun = (props: Props) => {
         }
       );
 
-      const jsonData = await cloudRes.data();
+      const jsonData = cloudRes.data;
       if (jsonData?.error) return setErr(jsonData?.error?.message);
-      console.log("'ere");
       if (!jsonData)
         return setErr(
           "The server did not reply with anything. This shouldn't be possible."
         );
 
-
-      await post(`/api/run/submit/${props.game.id}`, {
-        time: h * 3600 + m * 60 + s == 0,
-        video: jsonData.secure_url,
-      });
+      await post(
+        `/api/run/submit/${props.game.id}`,
+        {
+          time: h * 3600 + m * 60 + s,
+          video: jsonData.secure_url,
+        },
+        {
+          token,
+        }
+      );
 
       setUploaded(true);
     } catch (err: any) {

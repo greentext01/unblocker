@@ -7,15 +7,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { name } = req.query;
 
-  if (!name) return res.status(400).json({ error: 'Please input a name' });
-
-  const proxies = await prisma.proxy.findUnique({
+  const proxy = await prisma.proxy.findUnique({
     where: {
       name: name as string,
     },
   });
 
-  res.status(200).json({ proxies: proxies });
+  if (!proxy) return res.status(404).json({ error: 'Proxy not found' });
+
+  res.status(200).json({ proxy: proxy?.url });
 };
 
 export default handler;
