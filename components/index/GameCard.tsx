@@ -18,25 +18,28 @@ type Props = {
 
 export default function Game(props: Props) {
   const [approved, setApproved] = useState(props.game.approved);
+  const [deleted, setDeleted] = useState(false);
 
-  return (
-    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-      <Link href={`/play/${props.game.id}`} passHref>
+  if (!deleted) {
+    return (
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
         <Card
           sx={{
             opacity: approved ? 1 : 0.15,
           }}
         >
           <CardContent>
-            <MuiLink
-              gutterBottom
-              variant="h5"
-              component="div"
-              color="inherit"
-              underline="hover"
-            >
-              {props.game.name}
-            </MuiLink>
+            <Link href={`/play/${props.game.id}`} passHref>
+              <MuiLink
+                gutterBottom
+                variant="h5"
+                component="div"
+                color="inherit"
+                underline="hover"
+              >
+                {props.game.name}
+              </MuiLink>
+            </Link>
             <Typography variant="caption" component="div">
               Category: {props.game.category}
             </Typography>
@@ -45,27 +48,49 @@ export default function Game(props: Props) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Play</Button>
+            <Link href={`/play/${props.game.id}`} passHref>
+              <Button size="small">Play</Button>
+            </Link>
             {!approved && (
-              <Button
-                size="small"
-                onClick={() => {
-                  setApproved(true);
+              <>
+                <Button
+                  size="small"
+                  onClick={() => {
+                    setApproved(true);
 
-                  post(
-                    `/api/game/approve/${props.game.id}`,
-                    {
-                      approved: true,
-                    },
-                    {
-                      token: props.token,
-                      method: 'PATCH',
-                    }
-                  );
-                }}
-              >
-                Approve
-              </Button>
+                    post(
+                      `/api/game/approve/${props.game.id}`,
+                      {
+                        approved: true,
+                      },
+                      {
+                        token: props.token,
+                        method: 'PATCH',
+                      }
+                    );
+                  }}
+                >
+                  Approve
+                </Button>
+                <Button
+                  size="small"
+                  color="error"
+                  onClick={() => {
+                    setDeleted(true);
+
+                    post(
+                      `/api/game/delete/${props.game.id}`,
+                      {},
+                      {
+                        token: props.token,
+                        method: 'DELETE',
+                      }
+                    );
+                  }}
+                >
+                  Delete
+                </Button>
+              </>
             )}
             {approved && (
               <Button
@@ -90,7 +115,9 @@ export default function Game(props: Props) {
             )}
           </CardActions>
         </Card>
-      </Link>
-    </Grid>
-  );
+      </Grid>
+    );
+  } else {
+    return <></>;
+  }
 }
