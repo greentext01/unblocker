@@ -12,10 +12,12 @@ export default function launchUnblocker(
     if (!proxy.proxy) return 'Failed to get unblocker ' + unblocker;
 
     const lowerURL = url.toLowerCase();
-    if (urlre.test(lowerURL)) {
-      windowRef?.location = `${proxy.proxy}${url}/`;
-    } else {
-      windowRef?.location = `${proxy.proxy}https://${url}/`;
+    if (windowRef) {
+      if (urlre.test(lowerURL)) {
+        windowRef.location = `${proxy.proxy}${url}/`;
+      } else {
+        windowRef.location = `${proxy.proxy}https://${url}/`;
+      }
     }
   });
 }
