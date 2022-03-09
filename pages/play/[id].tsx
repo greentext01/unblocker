@@ -1,50 +1,39 @@
-import { GetServerSideProps } from 'next';
-import React from 'react';
+import { LinearProgress } from '@mui/material';
+import Error from 'next/error';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import Game from '../../components/play/Game';
-import prisma from '../../lib/prisma';
 
 type Props = {
   game: GameDetails;
   runs: Run[];
 };
 
-const Play = (props: Props) => {
-  return <Game {...props} />;
-};
+const Play = () => {
+  const [data, setData] = useState();
+  const [error, setError] = useState<null | number>(null);
+  const router = useRouter();
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id = parseInt(context.params?.id as string);
-  if (!id) return { notFound: true };
+  useEffect(() => {
+    const getGame = async () => {
+      const res = await fetch(`/api/game/details/${router.query.id}`);
 
-  const game = await prisma.game.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      credit: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
+      if(!res.ok)
+        return setError(res.status);
+      
+      setData(await res.json());
+    };
 
-  if (!game) return { notFound: true };
+    getGame();
+  }, [router.query.id]);
 
-  const runs = await prisma.run.findMany({
-    where: {
-      gameId: game.id,
-    },
-    include: {
-      runner: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
-
-  return { props: { game, runs } };
+  if (data) {
+    return <Game {...data} />;
+  } else if (error) {
+    return <Error statusCode={error} />;
+  } else {
+    return <LinearProgress />;
+  }
 };
 
 export default Play;
