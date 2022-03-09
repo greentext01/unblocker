@@ -12,8 +12,8 @@ export default async function launchUnblocker(
 
   const lowerURL = url.toLowerCase();
   if (urlre.test(lowerURL)) {
-    window.location = `${proxy.proxy}${url}/`;
+    window.location.href = `${proxy.proxy}${url}/`;
   } else {
-    window.location = `${proxy.proxy}https://${url}/`;
+    window.location.href = `${proxy.proxy}https://${url}/`;
   }
 }
