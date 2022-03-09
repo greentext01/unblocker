@@ -1,6 +1,6 @@
 {
   "name": "unblocker",
-  "version": "1.0 rc1",
+  "version": "0.9.9",
   "private": true,
   "scripts": {
     "dev": "next dev",
