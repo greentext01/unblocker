@@ -4,24 +4,26 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Game from '../../components/play/Game';
 
-type Props = {
+type Data = {
   game: GameDetails;
   runs: Run[];
 };
 
 const Play = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState<Data>();
   const [error, setError] = useState<null | number>(null);
   const router = useRouter();
 
   useEffect(() => {
     const getGame = async () => {
-      const res = await fetch(`/api/game/details/${router.query.id}`);
-
-      if(!res.ok)
-        return setError(res.status);
-      
-      setData(await res.json());
+      if(router.query.id) {
+        const res = await fetch(`/api/game/details/${router.query.id}`);
+  
+        if(!res.ok)
+          return setError(res.status);
+        
+        setData(await res.json());
+      }
     };
 
     getGame();
