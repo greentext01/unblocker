@@ -26,9 +26,10 @@ export default function Game(props: Props) {
         <Card
           sx={{
             opacity: approved ? 1 : 0.15,
+            height: '100%'
           }}
         >
-          <CardContent>
+          <CardContent sx={{ height: '130px' }}>
             <Link href={`/play/${props.game.id}`} passHref>
               <MuiLink
                 gutterBottom
@@ -51,7 +52,7 @@ export default function Game(props: Props) {
             <Link href={`/play/${props.game.id}`} passHref>
               <Button size="small">Play</Button>
             </Link>
-            {!approved && (
+            {!approved && props.token && (
               <>
                 <Button
                   size="small"
@@ -92,7 +93,7 @@ export default function Game(props: Props) {
                 </Button>
               </>
             )}
-            {approved && (
+            {approved && props.token && (
               <Button
                 size="small"
                 onClick={() => {
