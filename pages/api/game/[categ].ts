@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const games = await prisma.game.findMany({
     orderBy: [
       {
-        name: 'desc',
+        name: 'asc',
       },
     ],
     where: {
