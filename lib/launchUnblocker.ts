@@ -1,20 +1,21 @@
 import { urlre } from '../pages/add';
 import { get } from './superfetch';
 
-export default async function launchUnblocker(
+export default function launchUnblocker(
   unblocker: 'womginx' | 'corrosion',
   url: string
 ) {
-  const proxy = await get(`/api/proxy/${unblocker}`);
-
+  const windowRef = window.open();
+  
   if (!url) return 'Please input a url';
+  get(`/api/proxy/${unblocker}`).then((proxy) => {
+    if (!proxy.proxy) return 'Failed to get unblocker ' + unblocker;
 
-  if (!proxy.proxy) return 'Failed to get unblocker ' + unblocker;
-
-  const lowerURL = url.toLowerCase();
-  if (urlre.test(lowerURL)) {
-    window.open(`${proxy.proxy}${url}`);
-  } else {
-    window.open(`${proxy.proxy}https://${url}`);
-  }
+    const lowerURL = url.toLowerCase();
+    if (urlre.test(lowerURL)) {
+      windowRef.location = `${proxy.proxy}${url}/`;
+    } else {
+      windowRef.location = `${proxy.proxy}https://${url}/`;
+    }
+  });
 }
