@@ -13,9 +13,9 @@ export default function launchUnblocker(
 
     const lowerURL = url.toLowerCase();
     if (urlre.test(lowerURL)) {
-      windowRef.location = `${proxy.proxy}${url}/`;
+      windowRef?.location = `${proxy.proxy}${url}/`;
     } else {
-      windowRef.location = `${proxy.proxy}https://${url}/`;
+      windowRef?.location = `${proxy.proxy}https://${url}/`;
     }
   });
 }
