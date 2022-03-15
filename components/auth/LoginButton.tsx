@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import GoogleLogin, {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
@@ -22,21 +22,23 @@ function LoginButton(props: { onLogin: (token: string) => void }) {
   }
 
   return (
-    <GoogleLogin
-      clientId={process.env.GOOGLE_CLIENT_ID as string}
-      render={(renderProps) => (
-        <GoogleButton signin={true} onClick={renderProps.onClick} />
-      )}
-      buttonText="Login"
-      onSuccess={
-        onLogin as (
-          response: GoogleLoginResponse | GoogleLoginResponseOffline
-        ) => void
-      }
-      onFailure={onLoginFail}
-      cookiePolicy={'single_host_origin'}
-      isSignedIn={true}
-    />
+    <>
+      <GoogleLogin
+        clientId={process.env.GOOGLE_CLIENT_ID as string}
+        render={(renderProps) => (
+          <GoogleButton signin={true} onClick={renderProps.onClick} />
+        )}
+        buttonText="Login"
+        onSuccess={
+          onLogin as (
+            response: GoogleLoginResponse | GoogleLoginResponseOffline
+          ) => void
+        }
+        onFailure={onLoginFail}
+        cookiePolicy={'single_host_origin'}
+        isSignedIn={true}
+      />
+    </>
   );
 }
 
