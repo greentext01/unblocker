@@ -10,6 +10,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = getUser(req);
 
   const games = await prisma.game.findMany({
+    orderBy: [
+      {
+        name: 'asc',
+      },
+    ],
     where: {
       approved: user?.admin ? undefined : true,
       category: categ && categ != 'Any' ? (categ as string) : undefined,
