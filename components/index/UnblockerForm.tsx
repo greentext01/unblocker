@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Grid, TextField } from '@mui/material';
-import UnblockerButtons from './UnblockerButtons';
+import { Button, Grid, TextField } from '@mui/material';
 import launchUnblocker from '../../lib/launchUnblocker';
 
 function UnblockerForm() {
   const [error, setError] = useState('');
   const [url, setUrl] = useState('');
 
-  function onSubmit(selectedIndex: number) {
+  function onSubmit() {
     if (!url) return setError('Please input a url');
-    launchUnblocker(selectedIndex == 0 ? 'womginx' : 'corrosion', url);
+    launchUnblocker('womginx', url);
   }
 
   return (
@@ -32,7 +31,13 @@ function UnblockerForm() {
         />
       </Grid>
       <Grid item xs={12} md="auto">
-        <UnblockerButtons handleClick={onSubmit} />
+        <Button
+          onClick={onSubmit}
+          sx={{ width: '100%', height: '56px', px: 5}}
+          variant="contained"
+        >
+          Play
+        </Button>
       </Grid>
     </Grid>
   );
