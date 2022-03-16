@@ -7,9 +7,6 @@ function LogoutButton(props: {onLogout: () => void}) {
     <GoogleLogout
       clientId={process.env.GOOGLE_CLIENT_ID as string}
       onLogoutSuccess={() => props.onLogout()}
-      render={(renderProps) => (
-        <GoogleButton signin={false} onClick={renderProps.onClick} />
-      )}
     />
   );
 }
