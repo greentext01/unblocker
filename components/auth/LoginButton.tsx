@@ -25,10 +25,6 @@ function LoginButton(props: { onLogin: (token: string) => void }) {
     <>
       <GoogleLogin
         clientId={process.env.GOOGLE_CLIENT_ID as string}
-        render={(renderProps) => (
-          <GoogleButton signin={true} onClick={renderProps.onClick} />
-        )}
-        buttonText="Login"
         onSuccess={
           onLogin as (
             response: GoogleLoginResponse | GoogleLoginResponseOffline
