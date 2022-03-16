@@ -13,7 +13,7 @@ export default function GameHeader() {
         }}
       >
         <RespHeader>
-          Games (With Shrimp 🦐)
+          Games
         </RespHeader>
       </Box>
       <Box
