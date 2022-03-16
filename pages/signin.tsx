@@ -11,12 +11,13 @@ export default function SignIn() {
 
   return (
     <Box sx={{ margin: '10vmin' }}>
-      <h1>You are not signed in!</h1>
+      {/*<h1>You are not signed in!</h1>
       <AuthButtons
         onChange={(token) => {
           if (token) router.push('/');
         }}
-      />
+      />*/}
+      <h1>Disabled for now until I find a fix for signing in on iPads</h1>
     </Box>
   );
 }
