@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     },
   });
   
-  useEffect({
+  useEffect(() => {
     window.location.href = "https://gameslist-with-shrimp.herokuapp.com/";
   }, []);
 
