@@ -9,6 +9,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       mode: 'dark',
     },
   });
+  
+  window.location.href = "https://gameslist-with-shrimp.herokuapp.com/";
 
   return (
     <>
