@@ -2,7 +2,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import Head from 'next/head';
-import { useEffect } from React;
+import { useEffect } from 'React';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const theme = createTheme({
